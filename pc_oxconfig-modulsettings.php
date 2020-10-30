@@ -1,4 +1,6 @@
 <?php
+// https://github.com/proudcommerce/oxconfig-modulsettings
+
 require_once dirname(__FILE__) . "/bootstrap.php";
 
 // CHANGE THIS!!!
