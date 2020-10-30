@@ -5,7 +5,7 @@ Edit OXID modul settings: aModules, aModuleEvents, aModuleFiles, aDisabledModule
 
 ## Usage
 
-1. copy file to `pc_oxconfig-modulsettings.php` into your shop-installation
+1. copy file to `pc_oxconfig-modulsettings.php` into your shop root directory
 2. change secret in line 5
 3. submit "go" button to see (and change) module settings
 
