@@ -1,5 +1,12 @@
 <?php
-// https://github.com/proudcommerce/oxconfig-modulsettings
+/**
+ * @package oxconfig-modulesettings
+ * @version 1.0.0
+ * @url     https://github.com/proudcommerce/oxconfig-modulsettings
+ *
+ * @author  Stefan Moises <beffy@proudcommerce.com>
+ * @author  Tobias Merkl <tobias@proudcommerce.com>
+ */
 
 require_once dirname(__FILE__) . "/bootstrap.php";
 
