@@ -67,6 +67,12 @@ function resetModule($sModuleId, $search = '')
         $oConfig->saveShopConfVar('aarr', 'aModuleTemplates', $aModuleTemplates);
         $ret .= "<br/>[INFO] Module {$sModuleId} removed from aModuleTemplates";
     }
+    $aModuleControllers = $oConfig->getShopConfVar('aModuleControllers');
+    if (array_key_exists($sModuleId, $aModuleControllers)) {
+        unset($aModuleControllers[$sModuleId]);
+        $oConfig->saveShopConfVar('aarr', 'aModuleControllers', $aModuleControllers);
+        $ret .= "<br/>[INFO] Module {$sModuleId} removed from aModuleControllers";
+    }
     $aModuleEvents = $oConfig->getShopConfVar('aModuleEvents');
     if (array_key_exists($sModuleId, $aModuleEvents)) {
         unset($aModuleEvents[$sModuleId]);
