@@ -1,7 +1,8 @@
 # ProudCommerce oxConfig Modulsettings
 
 Edit OXID modul settings: aModules, aModuleEvents, aModuleFiles, aDisabledModules, aModuleVersions, aModuleTemplates, aModuleControllers
-Sometimes old module entries are still present in the various OXID oxconfig array values, e.g. old controllers in _aModuleControllers_ and you get errors activating modules (e.g. duplicate controller names etc.) and since the values are arrays andy also encoded in oxconfig, there is no way to edit them directly.
+
+Sometimes old module entries are still present in the various OXID oxconfig array values, e.g. old controllers in _aModuleControllers_ and you get errors activating modules (e.g. duplicate controller names etc.). And since the values are not only arrays but also encoded in oxconfig, there is no way to edit them directly.
 
 This script removes all DB values for a certain module ID from the internal oxconfig arrays to that everything is in a clean state again and you can (re-)activate problematic modules.
 
