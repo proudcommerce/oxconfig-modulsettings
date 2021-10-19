@@ -6,6 +6,9 @@ Sometimes old module entries are still present in the various OXID oxconfig arra
 
 This script removes all DB values for a certain module ID from the internal oxconfig arrays to that everything is in a clean state again and you can (re-)activate problematic modules.
 
+<img width="1302" alt="grafik" src="https://user-images.githubusercontent.com/1737182/137934888-d6e9b518-bad2-4f6e-801d-0abc4fcd7169.png">
+
+
 ## Usage
 
 1. copy file to `pc_oxconfig-modulsettings.php` into your shop root directory
