@@ -16,11 +16,11 @@ use OxidEsales\Eshop\Core\Registry;
 $secretKey = 'adc92rwsfvjsdfkSS093tergAskdfs';
 $msg = "";
 
-function resetModule($sModuleId, $search = '')
+function resetModule($sModuleId, $search = '', $shopId = 1)
 {
     $ret = "<p>Resetting module: $sModuleId</p>";
     $oConfig = Registry::getConfig();
-    $aModules = $oConfig->getShopConfVar('aModules');
+    $aModules = $oConfig->getShopConfVar('aModules', $shopId);
     // there may be old module chain keys inside the array!
     if ($search !== '') {
         foreach ($aModules as $k => $v) {
@@ -30,7 +30,7 @@ function resetModule($sModuleId, $search = '')
                 $aModules[$k] = $v;
             }
         }
-        $oConfig->saveShopConfVar('aarr', 'aModules', $aModules);
+        $oConfig->saveShopConfVar('aarr', 'aModules', $aModules, $shopId);
     }
     if ($sModuleId == '') {
         return;
@@ -39,52 +39,52 @@ function resetModule($sModuleId, $search = '')
     $iOldKey = array_search($sModuleId, $aModules);
     if ($iOldKey !== false) {
         unset($aModules[$iOldKey]);
-        $oConfig->saveShopConfVar('aarr', 'aModules', $aModules);
+        $oConfig->saveShopConfVar('aarr', 'aModules', $aModules, $shopId);
         $ret .= "<br/>[INFO] Module {$sModuleId} removed from aModules";
     }
 
     // check disabled modules
-    $aDisabledModules = $oConfig->getShopConfVar('aDisabledModules');
+    $aDisabledModules = $oConfig->getShopConfVar('aDisabledModules', $shopId);
     $iOldKey = array_search($sModuleId, $aDisabledModules);
     if ($iOldKey !== false) {
         unset($aDisabledModules[$iOldKey]);
-        $oConfig->saveShopConfVar('aarr', 'aDisabledModules', $aDisabledModules);
+        $oConfig->saveShopConfVar('aarr', 'aDisabledModules', $aDisabledModules, $shopId);
         $ret .= "<br/>[INFO] Module {$sModuleId} removed from aDisabledModules";
     }
-    $aModulePaths = $oConfig->getShopConfVar('aModulePaths');
+    $aModulePaths = $oConfig->getShopConfVar('aModulePaths', $shopId);
     if (array_key_exists($sModuleId, $aModulePaths)) {
         unset($aModulePaths[$sModuleId]);
-        $oConfig->saveShopConfVar('aarr', 'aModulePaths', $aModulePaths);
+        $oConfig->saveShopConfVar('aarr', 'aModulePaths', $aModulePaths, $shopId);
         $ret .= "<br/>[INFO] Module {$sModuleId} removed from aModulePaths";
     }
-    $aModuleFiles = $oConfig->getShopConfVar('aModuleFiles');
+    $aModuleFiles = $oConfig->getShopConfVar('aModuleFiles', $shopId);
     if (array_key_exists($sModuleId, $aModuleFiles)) {
         unset($aModuleFiles[$sModuleId]);
-        $oConfig->saveShopConfVar('aarr', 'aModuleFiles', $aModuleFiles);
+        $oConfig->saveShopConfVar('aarr', 'aModuleFiles', $aModuleFiles, $shopId);
         $ret .= "<br/>[INFO] Module {$sModuleId} removed from aModuleFiles";
     }
-    $aModuleTemplates = $oConfig->getShopConfVar('aModuleTemplates');
+    $aModuleTemplates = $oConfig->getShopConfVar('aModuleTemplates', $shopId);
     if (array_key_exists($sModuleId, $aModuleTemplates)) {
         unset($aModuleTemplates[$sModuleId]);
-        $oConfig->saveShopConfVar('aarr', 'aModuleTemplates', $aModuleTemplates);
+        $oConfig->saveShopConfVar('aarr', 'aModuleTemplates', $aModuleTemplates, $shopId);
         $ret .= "<br/>[INFO] Module {$sModuleId} removed from aModuleTemplates";
     }
-    $aModuleControllers = $oConfig->getShopConfVar('aModuleControllers');
+    $aModuleControllers = $oConfig->getShopConfVar('aModuleControllers', $shopId);
     if (array_key_exists($sModuleId, $aModuleControllers)) {
         unset($aModuleControllers[$sModuleId]);
-        $oConfig->saveShopConfVar('aarr', 'aModuleControllers', $aModuleControllers);
+        $oConfig->saveShopConfVar('aarr', 'aModuleControllers', $aModuleControllers, $shopId);
         $ret .= "<br/>[INFO] Module {$sModuleId} removed from aModuleControllers";
     }
-    $aModuleEvents = $oConfig->getShopConfVar('aModuleEvents');
+    $aModuleEvents = $oConfig->getShopConfVar('aModuleEvents', $shopId);
     if (array_key_exists($sModuleId, $aModuleEvents)) {
         unset($aModuleEvents[$sModuleId]);
-        $oConfig->saveShopConfVar('aarr', 'aModuleEvents', $aModuleEvents);
+        $oConfig->saveShopConfVar('aarr', 'aModuleEvents', $aModuleEvents, $shopId);
         $ret .= "<br/>[INFO] Module {$sModuleId} removed from aModuleEvents";
     }
-    $aModuleVersions = $oConfig->getShopConfVar('aModuleVersions');
+    $aModuleVersions = $oConfig->getShopConfVar('aModuleVersions', $shopId);
     if (array_key_exists($sModuleId, $aModuleVersions)) {
         unset($aModuleVersions[$sModuleId]);
-        $oConfig->saveShopConfVar('aarr', 'aModuleVersions', $aModuleVersions);
+        $oConfig->saveShopConfVar('aarr', 'aModuleVersions', $aModuleVersions, $shopId);
         $ret .= "<br/>[INFO] Module {$sModuleId} removed from aModuleVersions";
     }
     $ret .= "<p>Done resetting!</p>";
@@ -95,19 +95,24 @@ $encoded = trim($_POST['encvalue']);
 $decoded = trim($_POST['decvalue']);
 $secret = trim($_POST['secret']);
 $moduleId = trim($_POST['moduleid']);
+$shopId = trim($_POST['shopid']);
 $toreplace = trim($_POST['toreplace']);
 $secretOK = ($secret !== '' && $secret === $secretKey);
 
 $oConfig = Registry::getConfig();
 $sModules = $sDisabledModules = $sModuleEvents = $sModuleFiles = $sModuleVersions = $sModuleTemplates = $sModuleControllers = '';
 
-$aModules = $oConfig->getShopConfVar('aModules');
-$aDisabledModules = $oConfig->getShopConfVar('aDisabledModules');
-$aModuleEvents = $oConfig->getShopConfVar('aModuleEvents');
-$aModuleFiles = $oConfig->getShopConfVar('aModuleFiles');
-$aModuleVersions = $oConfig->getShopConfVar('aModuleVersions');
-$aModuleTemplates = $oConfig->getShopConfVar('aModuleTemplates');
-$aModuleControllers = $oConfig->getShopConfVar('aModuleControllers');
+if ($shopId == '') {
+    $shopId = 1;
+}
+
+$aModules = $oConfig->getShopConfVar('aModules', $shopId);
+$aDisabledModules = $oConfig->getShopConfVar('aDisabledModules', $shopId);
+$aModuleEvents = $oConfig->getShopConfVar('aModuleEvents', $shopId);
+$aModuleFiles = $oConfig->getShopConfVar('aModuleFiles', $shopId);
+$aModuleVersions = $oConfig->getShopConfVar('aModuleVersions', $shopId);
+$aModuleTemplates = $oConfig->getShopConfVar('aModuleTemplates', $shopId);
+$aModuleControllers = $oConfig->getShopConfVar('aModuleControllers', $shopId);
 
 if ($encoded !== '' && $decoded === '') {
     $decoded = var_export(unserialize($encoded), true);
@@ -159,6 +164,10 @@ if ($secretOK) {
         	<h2 class="subtitle">Enter secret to submit!</h2>
             <input class="input" type="password" size="30" name="secret" value="<?php echo $secret; ?>" size="30"/>
             <br><br>
+            <h2 class="subtitle">Shop ID </h2>
+            <input class="input" type="text" placeholder="1" name="shopid" value="<?php echo $shopId; ?>" size="3"/>
+            <br>
+            <br>
             <h2 class="subtitle">Reset module by ID (module will be removed from aModules, aModuleEvents, aModuleFiles, aDisabledModules, aModuleVersions, aModuleTemplates, aModuleControllers)</h2>
             <input class="input" type="text" placeholder="exonn_sengines" name="moduleid" value="<?php echo $moduleId; ?>" size="30"/>
             <br>
